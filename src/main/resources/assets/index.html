@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>UT ClassBot</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.1/css/foundation.min.css">
+
+</head>
+<body>
+<div class="container" id="app">
+    <h3 class="text-center">UT ClassBot</h3>
+
+    <section>
+        <div class="columns medium-3">
+            <h3>Add a Class</h3>
+            <input placeholder="semester title"
+               v-model="newSemesterTitle"/>
+            <br/>
+            <input placeholder="course number"
+               v-model="newCourseNumber"
+                   @keyup.enter="addCourse"/>
+
+            <h5>Site</h5>
+            <input placeholder="site username"
+                   v-model="siteUser"/>
+            <br/>
+            <input type="password"
+                   placeholder="site password"
+                   v-model="sitePass"
+                   @keyup.enter="setSiteCredentials"/>
+
+            <h5>Email</h5>
+            <input placeholder="email address"
+                   v-model="emailUser"/>
+            <br/>
+            <input type="password"
+                   placeholder="email password"
+                   v-model="emailPass"
+                   @keyup.enter="setEmailCredentials"/>
+
+        </div>
+    </section>
+
+    <section>
+        <div class="columns medium-3" v-for="result in results">
+            <div class="card">
+                <div class="card-divider">
+                    <p>course: {{ result.courseNumber }}</p>
+                </div>
+                <div class="card-section">
+                    <p>semester: {{ result.semesterTitle }}</p>
+                    <p>status: {{ result.status }}</p>
+                    <p>lastChecked: {{ result.lastChecked }}</p>
+                    <p>detail: {{ result.detail }}</p>
+
+                    <div>
+                        <br/><button v-on:click="toggleEnabled(result.courseNumber)">enabled: {{ result.enabled }}</button>
+                        <br/><button v-on:click="toggleNotifyWhenOpen(result.courseNumber)">notifyOpen: {{ result.notifyOpen }}</button>
+                        <br/><button v-on:click="toggleNotifyWhenClosed(result.courseNumber)">notifyClosed: {{ result.notifyClosed }}</button>
+                        <br/><button v-on:click="toggleNotifyWhenWaitListed(result.courseNumber)">notifyWaitListed: {{ result.notifyWaitListed }}</button>
+                        <br/><button v-on:click="deleteCourse(result.courseNumber)">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+</div>
+
+<script src="dist/vue.min.js"></script>
+<script src="dist/axios.min.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
