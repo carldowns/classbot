@@ -42,17 +42,43 @@ public class AppConfig extends Configuration {
      * allows us to develop on the front-end without having the background automations going on
      */
 	@JsonProperty
-	private String enableAutomation;
+	private String automationEnabled;
 
+
+	public String getAutomationEnabled() {
+		return automationEnabled;
+	}
     public String getEnableAutomation() {
-        return enableAutomation;
+        return automationEnabled;
     }
 
     public Boolean isEnableAutomation() {
-        return Boolean.valueOf(enableAutomation);
+        return Boolean.valueOf(automationEnabled);
     }
 
     public void setEnableAutomation(String enableAutomation) {
-		this.enableAutomation = enableAutomation;
+		this.automationEnabled = enableAutomation;
 	}
+
+	@JsonProperty
+	private Integer automationIntervalInSeconds;
+
+	public Integer getAutomationIntervalInSeconds() {
+		return automationIntervalInSeconds;
+	}
+
+	@JsonProperty
+	private Integer automationStaggeredDelayInSeconds;
+
+	public Integer getAutomationStaggeredDelayInSeconds() {
+		return automationStaggeredDelayInSeconds;
+	}
+
+	@JsonProperty
+	private Integer automationThreadCount;
+
+	public Integer getAutomationThreadCount() {
+		return automationThreadCount;
+	}
+
 }

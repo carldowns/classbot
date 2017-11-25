@@ -15,14 +15,18 @@ public class CourseAutomationMgr {
     private ScheduledThreadPoolExecutor threadPool;
     private AppPreferences pref;
     private CourseDAO dao;
+    private AppConfig cfg;
 
     public CourseAutomationMgr(CourseDAO dao, AppPreferences pref, AppConfig cfg) {
         this.dao = dao;
         this.pref = pref;
+        this.cfg = cfg;
 
         if (cfg.isEnableAutomation()) {
-            this.threadPool = new ScheduledThreadPoolExecutor(5);
-            threadPool.scheduleAtFixedRate(jobRunner, 0, 1, TimeUnit.MINUTES); // run jobs every 1 minutes
+            this.threadPool = new ScheduledThreadPoolExecutor(cfg.getAutomationThreadCount());
+            threadPool.scheduleAtFixedRate(jobRunner,
+                    0, cfg.getAutomationIntervalInSeconds(),
+                    TimeUnit.SECONDS);
         }
     }
 
@@ -33,10 +37,12 @@ public class CourseAutomationMgr {
     Runnable jobRunner = new Runnable () {
         public void run () {
             try {
-                int count = 0; // delay each job by an additional 15 seconds
+                int count = 0;
                 for (CourseInfo info : dao.getCourses()) {
                     if (info.getEnabled()) {
-                        threadPool.schedule(new Job(info), 15 * count++, TimeUnit.SECONDS);
+                        threadPool.schedule(new Job(info),
+                                cfg.getAutomationStaggeredDelayInSeconds() * count++,
+                                TimeUnit.SECONDS);
                     }
                 }
             }
