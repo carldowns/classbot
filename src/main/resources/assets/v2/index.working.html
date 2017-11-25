@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>UT ClassBot</title>
+
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap@next/dist/css/bootstrap.min.css"/>
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css"/>
+
+    <script src="../dist/vue.min.js"></script>
+    <script src="//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+    <script src="../dist/axios.min.js"></script>
+
+</head>
+<body>
+
+<div class="container" id="app">
+
+    <div>
+        <!--fixed="top"-->
+        <b-navbar type="dark" variant="secondary" toggleable>
+            <b-navbar-brand href="#">
+                <img src="../img/texas_longhorns.png" width="30" height="30" class="d-inline-block align-top" alt="BV">
+                UT ClassBot
+            </b-navbar-brand>
+            <b-navbar-toggle target="nav_dropdown_collapse"></b-navbar-toggle>
+            <b-collapse is-nav id="nav_dropdown_collapse">
+                <!--<b-navbar-nav>-->
+                <!--<b-button v-b-toggle.collapse7 variant="danger">Add a Class</b-button>-->
+                <!--<b-button v-b-toggle.collapse8 variant="warning">Set Credentials</b-button>-->
+                <!--</b-navbar-nav>-->
+            </b-collapse>
+        </b-navbar>
+    </div>
+
+
+    <b-container>
+        <b-row>
+            <b-col>
+                <div>
+                </div>
+            </b-col>
+        </b-row>
+        <b-row>
+            <b-col>
+                <div>
+                    <b-btn v-b-toggle.collapse1 variant="primary">Add a Class</b-btn>
+                    <b-btn v-b-toggle.collapse2 variant="success">Setup Site</b-btn>
+                    <b-btn v-b-toggle.collapse3 variant="warning">Setup Email</b-btn>
+                </div>
+            </b-col>
+        </b-row>
+        <b-row>
+            <b-col>
+                <div>
+                    <b-collapse id="collapse1" class="mt-2">
+                        <b-card title="Course Identifiers">
+                            <div>
+                                <b-form @submit="addCourse">
+
+                                    <b-form-group
+                                            id="newSemesterGroup"
+                                            type="text"
+                                            horizontal
+                                            :label-cols="4"
+                                            breakpoint="md"
+                                            description="Spring 2018, etc"
+                                            label="Enter Semester Title">
+                                        <b-form-input v-model="newSemesterTitle" required id="newSemesterInput"></b-form-input>
+                                    </b-form-group>
+
+                                    <b-form-group
+                                            id="newCourseGroup"
+                                            type="text"
+                                            horizontal
+                                            :label-cols="4"
+                                            breakpoint="md"
+                                            description="11432, etc"
+                                            label="Enter Unique Course Number">
+                                        <b-form-input v-model="newCourseNumber" required id="newCourseInput"></b-form-input>
+                                    </b-form-group>
+
+                                    <b-button type="submit" variant="primary">Submit</b-button>
+                                    <b-button type="reset" variant="secondary">Reset</b-button>
+
+                                </b-form>
+                            </div>
+                        </b-card>
+                    </b-collapse>
+
+                    <b-collapse id="collapse2" class="mt-2">
+                        <b-card title="UT Site Credentials">
+                            <div>
+                                <b-form @submit="setSiteCredentials">
+
+                                    <b-form-group
+                                            horizontal
+                                            :label-cols="4"
+                                            breakpoint="md"
+                                            description="User name for the UT Registrar"
+                                            label="Enter UT User Name">
+                                        <b-form-input type="text" v-model="siteUser" required></b-form-input>
+                                    </b-form-group>
+
+                                    <b-form-group
+                                            horizontal
+                                            :label-cols="4"
+                                            breakpoint="md"
+                                            description="Password is protected!"
+                                            label="Enter UT Password">
+                                        <b-form-input type="password" v-model="sitePass" required></b-form-input>
+                                    </b-form-group>
+
+                                    <b-button type="submit" variant="primary">Submit</b-button>
+                                    <b-button type="reset" variant="secondary">Reset</b-button>
+
+                                </b-form>
+                            </div>
+                        </b-card>
+                    </b-collapse>
+
+                    <b-collapse id="collapse3" class="mt-2">
+                        <b-card title="Yahoo Email Notification">
+                            <div>
+                                <b-form @submit="setEmailCredentials">
+
+                                    <b-form-group
+                                            horizontal
+                                            :label-cols="4"
+                                            breakpoint="md"
+                                            description="User name for Yahoo Mail account"
+                                            label="Yahoo! Email Address">
+                                        <b-form-input type="email" v-model="emailUser" required></b-form-input>
+                                    </b-form-group>
+
+                                    <b-form-group
+                                            horizontal
+                                            :label-cols="4"
+                                            breakpoint="md"
+                                            description="Only Yahoo! accounts are supported"
+                                            label="Yahoo! Mail Password">
+                                        <b-form-input type="password" v-model="emailPass" required></b-form-input>
+                                    </b-form-group>
+
+                                    <b-button type="submit" variant="primary">Submit</b-button>
+                                    <b-button type="reset" variant="secondary">Reset</b-button>
+
+                                </b-form>
+                            </div>
+                        </b-card>
+                    </b-collapse>
+
+
+                </div>
+            </b-col>
+        </b-row>
+
+        <b-row>
+            <b-col>
+                <div v-for="result in results">
+                    <b-card v-bind:title="result.courseNumber">
+                        <p class="card-text">
+                            <strong>Status</strong> {{ result.status }}<br/>
+                            <strong>Scanned</strong> {{ result.lastChecked }}<br/>
+                            <strong>Semester</strong> {{ result.semesterTitle }}<br/>
+                            <strong>Detail</strong> {{ result.detail }}
+                        </p>
+
+                        <!--{{#if result.enabled === true}}-->
+                        <!--<p>This is enabled</p>-->
+                        <!--{{#if}}-->
+
+                        <b-link @click="toggleEnabled(result.courseNumber)"
+                                class="card-link">Enabled = {{ result.enabled }}</b-link>
+
+                        <b-link @click="toggleNotifyWhenOpen(result.courseNumber)"
+                                class="card-link">Notify Open = {{ result.notifyOpen }}</b-link>
+
+                        <b-link @click="toggleNotifyWhenClosed(result.courseNumber)"
+                                class="card-link">Notify Closed = {{ result.notifyClosed }}</b-link>
+
+                        <b-link @click="toggleNotifyWhenWaitListed(result.courseNumber)"
+                                class="card-link">Notify Wait-Listed = {{ result.notifyWaitListed }}</b-link>
+
+                        <hr/>
+
+                        <b-button @click="runNow(result.courseNumber)"
+                                  variant="success">Run Now!</b-button>
+
+                        <b-button @click="deleteCourse(result.courseNumber)"
+                                  variant="danger">Delete</b-button>
+                    </b-card>
+                </div>
+            </b-col>
+        </b-row>
+
+    </b-container>
+
+</div>
+
+<script src="../app.js"></script>
+
+</body>
+</html>

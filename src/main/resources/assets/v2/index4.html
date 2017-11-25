@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>UT ClassBot</title>
+
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap@next/dist/css/bootstrap.min.css"/>
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css"/>
+
+    <script src="../dist/vue.min.js"></script>
+    <script src="//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+    <script src="../dist/axios.min.js"></script>
+
+</head>
+<body>
+<div class="container" id="app">
+    <h3 class="text-center">UT ClassBot</h3>
+
+    <section>
+
+        <div>
+            <b-navbar type="dark" fixed="top" variant="secondary" toggleable>
+                <b-navbar-brand href="#">
+                    <img src="../img/texas_longhorns.png" width="30" height="30" class="d-inline-block align-top" alt="BV">
+                    UT ClassBot
+                </b-navbar-brand>
+                <b-navbar-toggle target="nav_dropdown_collapse"></b-navbar-toggle>
+                <b-collapse is-nav id="nav_dropdown_collapse">
+                    <b-navbar-nav>
+                        <b-nav-item href="#">Home</b-nav-item>
+                        <b-nav-item href="#">Link</b-nav-item>
+                        <!-- Navbar dropdowns -->
+                        <b-nav-item-dropdown text="Lang" right>
+                            <b-dropdown-item href="#">EN</b-dropdown-item>
+                            <b-dropdown-item href="#">ES</b-dropdown-item>
+                            <b-dropdown-item href="#">RU</b-dropdown-item>
+                            <b-dropdown-item href="#">FA</b-dropdown-item>
+                        </b-nav-item-dropdown>
+                        <b-nav-item-dropdown text="User" right>
+                            <b-dropdown-item href="#">Account</b-dropdown-item>
+                            <b-dropdown-item href="#">Settings</b-dropdown-item>
+                        </b-nav-item-dropdown>
+                    </b-navbar-nav>
+                </b-collapse>
+            </b-navbar>
+        </div>
+        <hr/>
+
+        <b-container>
+            <b-row>
+                <b-col>
+                    <div>
+                        <b-btn v-b-toggle.collapse5 variant="primary">Think 5</b-btn>
+                        <b-collapse id="collapse5" class="mt-2">
+                            <b-card>
+                                <div>
+                                    <b-form-group id="fieldsetHorizontal5"
+                                                  horizontal
+                                                  :label-cols="4"
+                                                  breakpoint="md"
+                                                  description="Let us know your name."
+                                                  label="Enter your name">
+                                        <b-form-input id="inputHorizontal5"></b-form-input>
+                                    </b-form-group>
+                                </div>
+                            </b-card>
+                        </b-collapse>
+                    </div>
+                </b-col>
+                <b-col>
+                    <div>
+                        <b-btn v-b-toggle.collapse6 variant="primary">Think 6</b-btn>
+                        <b-collapse id="collapse6" class="mt-2">
+                            <b-card>
+                                <p class="card-text">Collapse contents Here</p>
+                            </b-card>
+                        </b-collapse>
+                    </div>
+                </b-col>
+            </b-row>
+        </b-container>
+        <hr/>
+
+        <b-container>
+            <b-row>
+                <b-col>
+                    <div>
+                        <b-btn v-b-toggle.collapse7 variant="danger">Add a Class</b-btn>
+                        <b-btn v-b-toggle.collapse8 variant="warning">Set Credentials</b-btn>
+                    </div>
+                </b-col>
+            </b-row>
+            <b-row>
+                <b-col>
+                    <div>
+                        <b-collapse id="collapse8" class="mt-2">
+                            <b-card>
+                                <p class="card-text">Collapse contents Here</p>
+                            </b-card>
+                        </b-collapse>
+
+                        <b-collapse id="collapse7" class="mt-2">
+                            <b-card>
+                                <div>
+                                    <b-form-group id="fieldsetHorizontal7"
+                                                  horizontal
+                                                  :label-cols="4"
+                                                  breakpoint="md"
+                                                  description="Let us know your name."
+                                                  label="Enter your name">
+                                        <b-form-input id="inputHorizontal7"></b-form-input>
+                                    </b-form-group>
+                                </div>
+                            </b-card>
+                        </b-collapse>
+                    </div>
+                </b-col>
+            </b-row>
+        </b-container>
+
+        <hr/>
+
+        <b-container>
+            <b-row>
+                <b-col>1 of 3</b-col>
+                <b-col>2 of 3</b-col>
+                <b-col>3 of 3</b-col>
+            </b-row>
+        </b-container>
+
+        <hr/>
+
+        <div>
+            <b-form-group id="fieldsetHorizontal"
+                          horizontal
+                          :label-cols="4"
+                          breakpoint="md"
+                          description="Let us know your name."
+                          label="Enter your name">
+                <b-form-input id="inputHorizontal"></b-form-input>
+            </b-form-group>
+        </div>
+
+        <hr/>
+
+        <div>
+            <b-form-input v-model="text1"
+                          type="text"
+                          placeholder="Enter your name"></b-form-input>
+            <p>Value: {{ text1 }}</p>
+        </div>
+
+        <hr/>
+
+        <div>
+            <b-alert show variant="primary">Primary Alert</b-alert>
+            <b-alert show variant="secondary">Secondary Alert</b-alert>
+            <b-alert show variant="success">Success Alert</b-alert>
+            <b-alert show variant="danger">Danger Alert</b-alert>
+            <b-alert show variant="warning">Warning Alert</b-alert>
+            <b-alert show variant="info">Info Alert</b-alert>
+            <b-alert show variant="light">Light Alert</b-alert>
+            <b-alert show variant="dark">Dark Alert</b-alert>
+        </div>
+
+        <hr/>
+
+        <div>
+            <b-btn v-b-modal.modal1>Launch demo modal</b-btn>
+
+            <!-- Modal Component -->
+            <b-modal id="modal1" title="Bootstrap-Vue">
+                <p class="my-4">Hello from modal!</p>
+            </b-modal>
+        </div>
+
+        <hr/>
+
+        <div>
+            <b-btn v-b-toggle.collapse1 variant="primary">Toggle Collapse</b-btn>
+            <b-collapse id="collapse1" class="mt-2">
+                <b-card>
+                    <p class="card-text">Collapse contents Here</p>
+                    <b-btn v-b-toggle.collapse1_inner size="sm">Toggle Inner Collapse</b-btn>
+                    <b-collapse id=collapse1_inner class="mt-2">
+                        <b-card>Hello!</b-card>
+                    </b-collapse>
+                </b-card>
+            </b-collapse>
+
+        </div>
+
+        <hr/>
+
+        <div>
+            <b-card title="Card Title"
+                    img-src="https://lorempixel.com/600/300/food/5/"
+                    img-alt="Image"
+                    img-top
+                    tag="article"
+                    style="max-width: 20rem;"
+                    class="mb-2">
+                <p class="card-text">
+                    Some quick example text to build on the card title and make up the bulk of the card's content.
+                </p>
+                <b-button href="#" variant="primary">Go somewhere</b-button>
+            </b-card>
+        </div>
+
+        <hr/>
+
+        <div>
+            <b-card title="Card title"
+                    sub-title="Card subtitle">
+                <p class="card-text">
+                    Some quick example text to build on the <em>card title</em> and make up the bulk of the card's content.
+                </p>
+                <a href="#"
+                   class="card-link">Card link</a>
+                <b-link href="#"
+                        class="card-link">Another link</b-link>
+            </b-card>
+            <b-card title="Card title #2"
+                    sub-title="Card subtitle">
+                <p class="card-text">
+                    Well, that certainly is interesting...!
+                </p>
+                <a href="#"
+                   class="card-link">Card link</a>
+                <b-link href="#"
+                        class="card-link">Another link</b-link>
+            </b-card>
+        </div>
+
+        <hr/>
+
+        <div>
+            <b-card-group deck>
+                <b-card header="featured"
+                        header-tag="header"
+                        footer="Card Footer"
+                        footer-tag="footer"
+                        title="Title">
+                    <p class="card-text">Header and footers using props.</p>
+                    <b-button href="#"
+                              variant="primary">Go somewhere</b-button>
+                </b-card>
+                <b-card title="Title"
+                        header-tag="header"
+                        footer-tag="footer">
+                    <h6 slot="header"
+                        class="mb-0">Header Slot</h6>
+                    <em slot="footer">Footer Slot</em>
+                    <p class="card-text">Header and footers using slots.</p>
+                    <b-button href="#"
+                              variant="primary">Go somewhere</b-button>
+                </b-card>
+            </b-card-group>
+        </div>
+
+        <hr/>
+
+        <div>
+            <b-card-group deck class="mb-3">
+                <b-card border-variant="primary"
+                        header="Primary"
+                        header-bg-variant="primary"
+                        header-text-variant="white"
+                        align="center">
+                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </b-card>
+                <b-card border-variant="secondary"
+                        header="Secondary"
+                        header-border-variant="secondary"
+                        align="center">
+                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </b-card>
+                <b-card border-variant="success"
+                        header="Success"
+                        align="center">
+                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </b-card>
+            </b-card-group>
+            <b-card-group deck class="mb-3">
+                <b-card border-variant="info"
+                        header="Info"
+                        align="center">
+                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </b-card>
+                <b-card border-variant="warning"
+                        header="Warning"
+                        header-bg-variant="transparent"
+                        align="center">
+                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </b-card>
+                <b-card border-variant="danger"
+                        header="Danger"
+                        header-border-variant="danger"
+                        header-text-variant="danger"
+                        align="center">
+                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </b-card>
+            </b-card-group>
+            <b-card-group deck class="mb-3">
+                <b-card border-variant="light"
+                        header="Light"
+                        class="text-center">
+                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </b-card>
+                <b-card border-variant="dark"
+                        header="Dark"
+                        align="center">
+                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </b-card>
+            </b-card-group>
+        </div>
+
+    </section>
+
+
+    <section>
+        <div class="columns medium-3">
+            <h3>Add a Class</h3>
+            <input placeholder="semester title"
+                   v-model="newSemesterTitle"/>
+            <br/>
+            <input placeholder="course number"
+                   v-model="newCourseNumber"
+                   @keyup.enter="addCourse"/>
+
+            <h5>Site</h5>
+            <input placeholder="site username"
+                   v-model="siteUser"/>
+            <br/>
+            <input type="password"
+                   placeholder="site password"
+                   v-model="sitePass"
+                   @keyup.enter="setSiteCredentials"/>
+
+            <h5>Email</h5>
+            <input placeholder="email address"
+                   v-model="emailUser"/>
+            <br/>
+            <input type="password"
+                   placeholder="email password"
+                   v-model="emailPass"
+                   @keyup.enter="setEmailCredentials"/>
+
+        </div>
+    </section>
+
+    <section>
+        <div class="columns medium-3" v-for="result in results">
+            <div class="card">
+                <div class="card-divider">
+                    <p>course: {{ result.courseNumber }}</p>
+                </div>
+                <div class="card-section">
+                    <p>semester: {{ result.semesterTitle }}</p>
+                    <p>status: {{ result.status }}</p>
+                    <p>lastChecked: {{ result.lastChecked }}</p>
+                    <p>detail: {{ result.detail }}</p>
+
+                    <div>
+                        <br/><button v-on:click="toggleEnabled(result.courseNumber)">enabled: {{ result.enabled }}</button>
+                        <br/><button v-on:click="toggleNotifyWhenOpen(result.courseNumber)">notifyOpen: {{ result.notifyOpen }}</button>
+                        <br/><button v-on:click="toggleNotifyWhenClosed(result.courseNumber)">notifyClosed: {{ result.notifyClosed }}</button>
+                        <br/><button v-on:click="toggleNotifyWhenWaitListed(result.courseNumber)">notifyWaitListed: {{ result.notifyWaitListed }}</button>
+                        <br/><button v-on:click="deleteCourse(result.courseNumber)">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+</div>
+
+<script src="../app.js"></script>
+
+</body>
+</html>

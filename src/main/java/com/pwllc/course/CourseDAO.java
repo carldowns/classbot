@@ -60,7 +60,7 @@ public class CourseDAO {
         try {
             Connection conn = H2Database.getPersistentConnection();
             PreparedStatement stmt = conn.prepareStatement
-                    ("select * from course");
+                    ("select * from course order by courseNumber");
             stmt.executeQuery();
 
             ResultSet set = stmt.getResultSet();

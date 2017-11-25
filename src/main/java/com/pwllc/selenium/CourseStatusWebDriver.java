@@ -158,6 +158,10 @@ public class CourseStatusWebDriver {
         String text = details.getText();
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 
+        // remove the table headers: Unique Day Hour Room Instructor Status Flags
+        if (text.contains(" Flags ")) {
+            text = text.split(" Flags ")[1];
+        }
         course.setDetail(text);
         course.setLastChecked(timeStamp);
 
@@ -192,10 +196,10 @@ public class CourseStatusWebDriver {
 
         // TODO replace with something to get the word to the user
         StringBuffer builder = new StringBuffer();
-        builder.append(course.getSemesterTitle()).append(" - ");
-        builder.append(course.getStatus()).append(" - ");
-        builder.append(course.getLastChecked()).append(" - ");
-        builder.append(course.getCourseNumber()).append(" - ");
+        builder.append(course.getCourseNumber()).append("  ");
+        builder.append(course.getStatus()).append("  ");
+        builder.append(course.getSemesterTitle()).append("  ");
+        builder.append(course.getLastChecked()).append("  ");
         builder.append(course.getDetail());
 
         String notice = builder.toString();
@@ -213,7 +217,7 @@ public class CourseStatusWebDriver {
         String from = pref.getEmailUser();
         String pass = pref.getEmailPass();
 
-        String subject = "ClassBot Notice: " + course.getCourseNumber() + " is " + course.getStatus();
+        String subject = "ClassBot: " + course.getCourseNumber() + " is " + course.getStatus();
         EmailClient.send(from, pass, to, subject, notice);
     }
 }
