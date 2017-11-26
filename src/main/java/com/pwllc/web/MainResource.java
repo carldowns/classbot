@@ -2,6 +2,7 @@ package com.pwllc.web;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pwllc.app.AppPreferences;
+import com.pwllc.course.CourseAutomationMgr;
 import com.pwllc.course.CourseInfo;
 import com.pwllc.course.CourseDAO;
 
@@ -15,10 +16,12 @@ public class MainResource {
 
 	private CourseDAO dao;
     private AppPreferences pref;
+    private CourseAutomationMgr autoMgr;
 
-    public MainResource(CourseDAO dao, AppPreferences pref) {
+    public MainResource(CourseDAO dao, AppPreferences pref, CourseAutomationMgr autoMgr) {
         this.dao = dao;
         this.pref = pref;
+        this.autoMgr = autoMgr;
     }
 
     @GET
@@ -86,6 +89,13 @@ public class MainResource {
     public void delete(@PathParam("courseNumber") String courseNumber) {
         dao.deleteCourse(courseNumber);
     }
+
+    @GET
+    @Path("/run/{courseNumber}")
+    public void runAutomationNow(@PathParam("courseNumber") String courseNumber) {
+        autoMgr.runNow(courseNumber);
+    }
+
 
     // testing
     @GET

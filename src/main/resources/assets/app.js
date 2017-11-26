@@ -158,7 +158,23 @@ const vm = new Vue({
                 .catch(function (error) {
                     console.log(error);
                 });
+        },
+
+        runNow (courseNumber) {
+            axios.get('/api/main/run/' + courseNumber, {
+            })
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        refreshDisplay() {
+            vm.fetchList();
         }
+
     },
     directives: {
     }

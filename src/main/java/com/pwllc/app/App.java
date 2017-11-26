@@ -49,16 +49,17 @@ public class App extends Application<AppConfig> {
         // enable or disable static asset caching (helps during development)?
         setCachePolicy(configuration, environment);
 
-    	// create and register REST resource endpoints
         // configuration has a 'server:rootPath' declaration which prepends a rootPath for all Resources
         CourseDAO dao = new CourseDAO(configuration);
         AppPreferences pref = new AppPreferences();
 
-    	MainResource resource = new MainResource(dao, pref);
+        // start background automation
+        CourseAutomationMgr mgr = new CourseAutomationMgr(dao, pref, configuration);
+
+        // create and register REST resource endpoints
+    	MainResource resource = new MainResource(dao, pref, mgr);
     	environment.jersey().register(resource);
 
-        // start background automation
-        new CourseAutomationMgr(dao, pref, configuration);
     }
 
     private void setCachePolicy(AppConfig configuration, Environment environment) {

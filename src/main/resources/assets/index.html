@@ -39,6 +39,7 @@
                                     <b-nav-item v-b-toggle.collapse1>Add a Class</b-nav-item>
                                     <b-nav-item v-b-toggle.collapse2>Setup Site</b-nav-item>
                                     <b-nav-item v-b-toggle.collapse3>Setup Email</b-nav-item>
+                                    <b-nav-item v-on.click="refreshDisplay">Refresh</b-nav-item>
                                 </b-navbar-nav>
 
                             </b-collapse>
@@ -174,26 +175,34 @@
                                 <strong>Detail</strong> {{ result.detail }}
                             </p>
 
-                            <!--{{#if result.enabled === true}}-->
-                            <!--<p>This is enabled</p>-->
-                            <!--{{#if}}-->
-
                             <b-link @click="toggleEnabled(result.courseNumber)"
-                                    class="card-link">Enabled = {{ result.enabled }}</b-link>
+                                    class="card-link">Enabled
+                                    <span v-if="result.enabled"><b-badge variant="success">YES</b-badge></span>
+                                    <span v-else><b-badge variant="light">NO</b-badge></span>
+                                    </b-link>
 
                             <b-link @click="toggleNotifyWhenOpen(result.courseNumber)"
-                                    class="card-link">Notify Open = {{ result.notifyOpen }}</b-link>
+                                    class="card-link">Notify Open
+                                    <span v-if="result.notifyOpen"><b-badge variant="success">YES</b-badge></span>
+                                    <span v-else><b-badge variant="light">NO</b-badge></span>
+                                    </b-link>
 
                             <b-link @click="toggleNotifyWhenClosed(result.courseNumber)"
-                                    class="card-link">Notify Closed = {{ result.notifyClosed }}</b-link>
+                                    class="card-link">Notify Closed
+                                    <span v-if="result.notifyClosed"><b-badge variant="success">YES</b-badge></span>
+                                    <span v-else><b-badge variant="light">NO</b-badge></span>
+                                    </b-link>
 
                             <b-link @click="toggleNotifyWhenWaitListed(result.courseNumber)"
-                                    class="card-link">Notify Wait-Listed = {{ result.notifyWaitListed }}</b-link>
+                                    class="card-link">Notify Wait-Listed
+                                    <span v-if="result.notifyWaitListed"><b-badge variant="success">YES</b-badge></span>
+                                    <span v-else><b-badge variant="light">NO</b-badge></span>
+                                    </b-link>
 
                             <hr/>
 
-                            <!--<b-button @click="runNow(result.courseNumber)"-->
-                                      <!--variant="success">Run Now!</b-button>-->
+                            <b-button @click="runNow(result.courseNumber)"
+                                      variant="primary">Run Now!</b-button>
 
                             <b-button @click="deleteCourse(result.courseNumber)"
                                       variant="danger">Delete</b-button>

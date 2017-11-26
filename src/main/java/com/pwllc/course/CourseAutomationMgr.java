@@ -31,6 +31,20 @@ public class CourseAutomationMgr {
     }
 
     /**
+     * run the course automation now
+     * @param courseNumber course number
+     */
+    public void runNow (String courseNumber) {
+        try {
+           CourseInfo ci = dao.getCourse(courseNumber);
+            threadPool.execute(new Job (ci));
+        }
+        catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    /**
      * The Job Runner is set up to get all courses, and start them 15 seconds apart
      * each cycle gets a fresh set of CourseInfos so we are sure to get the latest configuration changes.
      */
