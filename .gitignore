@@ -10,4 +10,5 @@ logs/
 etc/data/
 data/
 node/
+dist/
 dependency-reduced-pom.xml
