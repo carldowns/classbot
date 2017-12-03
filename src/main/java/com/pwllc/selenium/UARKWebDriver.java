@@ -1,6 +1,5 @@
 package com.pwllc.selenium;
 
-import com.google.common.collect.Lists;
 import com.pwllc.app.AppPreferences;
 import com.pwllc.course.CourseInfo;
 import com.pwllc.notify.EmailClient;
@@ -15,8 +14,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Designed to determine the status of a given University of Arkansas course
@@ -47,7 +44,6 @@ public class UARKWebDriver implements iWebDriver {
         String agentString = "--user-agent=Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25";
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments(agentString);
-
         driver = new ChromeDriver(chromeOptions);
     }
 
@@ -90,7 +86,6 @@ public class UARKWebDriver implements iWebDriver {
         WebElement word = driver.findElement(By.id("password"));
         WebElement button = driver.findElement(By.tagName("button"));
 
-
         if (pref.getSiteUser() == null) {
             throw new RuntimeException("site user is not set");
         }
@@ -101,20 +96,6 @@ public class UARKWebDriver implements iWebDriver {
         }
         word.sendKeys(pref.getSitePass());
         button.submit();
-    }
-
-    public void confirmTitleContains (String title) {
-
-        // get the common page title element
-        WebElement pageTitle = driver.findElement(By.className("page-title"));
-        if (pageTitle == null) {
-            throw new RuntimeException ("no title detected");
-        }
-
-        String text = pageTitle.getText();
-        if (!text.contains(title)) {
-            throw new RuntimeException ("title located but it does not match " + title);
-        }
     }
 
     public void confirmPageContains (String text) {
@@ -163,11 +144,14 @@ public class UARKWebDriver implements iWebDriver {
 
         confirmLoggedIn();
 
-        // semester selector
         WebDriverWait wait = new WebDriverWait(driver, 15);
 
+        // this page in particular is some terribly written JavaScript -- any changes to it
+        // cause slow refreshes that the waits can even get around.
+        // So I had to resort to frigging sleeps. :-/
         sleep();
 
+        // semester selector
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("CLASS_SRCH_WRK2_STRM$35$")));
         Select select = new Select(driver.findElement(By.name("CLASS_SRCH_WRK2_STRM$35$")));
         select.selectByVisibleText(course.getSemesterTitle());
@@ -176,7 +160,6 @@ public class UARKWebDriver implements iWebDriver {
         sleep();
 
         // un-check open classes only checkbox
-        //wait = new WebDriverWait(driver, 15);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("SSR_CLSRCH_WRK_SSR_OPEN_ONLY$7")));
         WebElement checkbox = driver.findElement(By.name("SSR_CLSRCH_WRK_SSR_OPEN_ONLY$7"));
         boolean checked = checkbox.isSelected();
@@ -187,7 +170,6 @@ public class UARKWebDriver implements iWebDriver {
         sleep();
 
         // additional search criteria - click to open the panel
-        //wait = new WebDriverWait(driver, 15);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("DERIVED_CLSRCH_SSR_EXPAND_COLLAPS$149$$1")));
         WebElement criteria = driver.findElement(By.name("DERIVED_CLSRCH_SSR_EXPAND_COLLAPS$149$$1"));
         criteria.click();
@@ -195,7 +177,6 @@ public class UARKWebDriver implements iWebDriver {
         sleep();
 
         // unique course number
-        //wait = new WebDriverWait(driver, 15);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("SSR_CLSRCH_WRK_CLASS_NBR$12")));
         WebElement field = driver.findElement(By.name("SSR_CLSRCH_WRK_CLASS_NBR$12"));
         field.sendKeys(course.getCourseNumber());
@@ -224,12 +205,12 @@ public class UARKWebDriver implements iWebDriver {
 
         // this page only shows Icons for status and there is a legend
         // count the number of icons -- should be 1 of each per the legend
-        // the with with two (2) is the status
 
         List<WebElement> openImages = driver.findElements(By.cssSelector("img[alt='Open']"));
         List<WebElement> closedImages = driver.findElements(By.cssSelector("img[alt='Closed']"));
         List<WebElement> WaitListImages = driver.findElements(By.cssSelector("img[alt='Wait List']"));
 
+        // the one icon with two (2) instances is the current status for the class!
         if (openImages.size() > 1) {
             course.setStatus("open");
             if (course.getNotifyOpen()) {
@@ -291,6 +272,7 @@ public class UARKWebDriver implements iWebDriver {
             Thread.sleep(3000);
         }
         catch (Exception e) {
+            System.err.println(e.getMessage());
         }
     }
 }
