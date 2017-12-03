@@ -2,7 +2,9 @@ package com.pwllc.course;
 
 import com.pwllc.app.AppConfig;
 import com.pwllc.app.AppPreferences;
-import com.pwllc.selenium.CourseStatusWebDriver;
+import com.pwllc.selenium.UARKWebDriver;
+import com.pwllc.selenium.UTWebDriver;
+import com.pwllc.selenium.iWebDriver;
 
 import java.util.concurrent.*;
 
@@ -22,8 +24,11 @@ public class CourseAutomationMgr {
         this.pref = pref;
         this.cfg = cfg;
 
+        // start the pool so 'run now!' action works
+        this.threadPool = new ScheduledThreadPoolExecutor(cfg.getAutomationThreadCount());
+
+        // if background automation is enabled, queue JobRunner
         if (cfg.isEnableAutomation()) {
-            this.threadPool = new ScheduledThreadPoolExecutor(cfg.getAutomationThreadCount());
             threadPool.scheduleAtFixedRate(jobRunner,
                     0, cfg.getAutomationIntervalInSeconds(),
                     TimeUnit.SECONDS);
@@ -71,11 +76,22 @@ public class CourseAutomationMgr {
      */
     class Job implements Runnable {
         CourseInfo info;
-        CourseStatusWebDriver flow;
+        iWebDriver flow;
 
         Job (CourseInfo info) {
             this.info = info;
-            flow = new CourseStatusWebDriver(info, pref);
+
+            // select driver type
+            switch (cfg.getAutomationDriverType()) {
+                case "UT":
+                    flow = new UTWebDriver(info, pref);
+                    break;
+                case "UARK":
+                    flow = new UARKWebDriver(info, pref);
+                    break;
+                default:
+                    throw new IllegalStateException("missing configuration: driverType: UT | UARK");
+            }
         }
 
         public void run () {

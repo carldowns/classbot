@@ -8,18 +8,13 @@ import org.hibernate.validator.constraints.NotEmpty;
  *  configuration read from dropwizard yaml configuration file
  */
 public class AppConfig extends Configuration {
-	
-	@NotEmpty
+
+    @NotEmpty
 	private String response;
 	
 	@JsonProperty
 	public String getResponse() {
 		return response;
-	}
-	
-	@JsonProperty
-	public void setResponse(String response) {
-		this.response = response;
 	}
 
 	/**
@@ -34,16 +29,11 @@ public class AppConfig extends Configuration {
 		return enableCacheControl;
 	}
 
-	public void setEnableCacheControl(String enableCacheControl) {
-		this.enableCacheControl = enableCacheControl;
-	}
-
     /**
      * allows us to develop on the front-end without having the background automations going on
      */
 	@JsonProperty
 	private String automationEnabled;
-
 
 	public String getAutomationEnabled() {
 		return automationEnabled;
@@ -55,10 +45,6 @@ public class AppConfig extends Configuration {
     public Boolean isEnableAutomation() {
         return Boolean.valueOf(automationEnabled);
     }
-
-    public void setEnableAutomation(String enableAutomation) {
-		this.automationEnabled = enableAutomation;
-	}
 
 	@JsonProperty
 	private Integer automationIntervalInSeconds;
@@ -80,5 +66,17 @@ public class AppConfig extends Configuration {
 	public Integer getAutomationThreadCount() {
 		return automationThreadCount;
 	}
+
+
+    /**
+     * Driver type selects the driver class meaning either UT or UARK currently supported.
+     */
+    @NotEmpty
+    private String automationDriverType;
+
+    @JsonProperty
+    public String getAutomationDriverType() {
+        return automationDriverType;
+    }
 
 }

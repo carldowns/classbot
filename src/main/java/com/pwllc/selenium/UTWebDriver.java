@@ -15,7 +15,7 @@ import java.util.Date;
  * Designed to determine the status of a given UT course
  * @see "https://registrar.utexas.edu/"
  */
-public class CourseStatusWebDriver {
+public class UTWebDriver implements iWebDriver {
 
     WebDriver driver;
     AppPreferences pref;
@@ -25,10 +25,10 @@ public class CourseStatusWebDriver {
     public static void main (String args[]) {
 
         CourseInfo open = new CourseInfo("Spring 2018", "47465");
-        new CourseStatusWebDriver(open, new AppPreferences()).doFlow();
+        new UTWebDriver(open, new AppPreferences()).doFlow();
     }
 
-    public CourseStatusWebDriver(CourseInfo course, AppPreferences pref) {
+    public UTWebDriver(CourseInfo course, AppPreferences pref) {
         this.course = course;
         this.pref = pref;
     }
