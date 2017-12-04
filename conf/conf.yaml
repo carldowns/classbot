@@ -9,6 +9,7 @@ automationEnabled: false
 automationDriverType: UARK
 automationIntervalInSeconds: 60
 automationStaggeredDelayInSeconds: 15
+automationMaxNotificationsPerHour: 3
 automationThreadCount: 5
 
 enableCacheControl: false

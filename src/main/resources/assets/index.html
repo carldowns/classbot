@@ -38,7 +38,7 @@
                                 <b-navbar-nav>
                                     <b-nav-item v-b-toggle.collapse1>Add a Class</b-nav-item>
                                     <b-nav-item v-b-toggle.collapse2>Setup Site</b-nav-item>
-                                    <b-nav-item v-b-toggle.collapse3>Setup Email</b-nav-item>
+                                    <b-nav-item v-b-toggle.collapse3>Setup Notify</b-nav-item>
                                     <b-nav-item v-on:click="refreshDisplay">Refresh</b-nav-item>
                                 </b-navbar-nav>
 
@@ -128,15 +128,15 @@
                         </b-collapse>
 
                         <b-collapse id="collapse3" class="mt-2">
-                            <b-card title="Yahoo Email Notification">
+                            <b-card title="Notification Method">
                                 <div>
-                                    <b-form @submit="setEmailCredentials">
+                                    <b-form @submit="setNotificationCredentials">
 
                                         <b-form-group
                                                 horizontal
                                                 :label-cols="4"
                                                 breakpoint="md"
-                                                description="User name for Yahoo Mail account"
+                                                description="User name for Yahoo! account to notify through"
                                                 label="Yahoo! Email Address">
                                             <b-form-input type="email" v-model="emailUser" required></b-form-input>
                                         </b-form-group>
@@ -145,9 +145,18 @@
                                                 horizontal
                                                 :label-cols="4"
                                                 breakpoint="md"
-                                                description="Only Yahoo! accounts are supported"
-                                                label="Yahoo! Mail Password">
+                                                description="Yahoo! account password.  Only Yahoo! accounts are supported"
+                                                label="Yahoo! Email Password">
                                             <b-form-input type="password" v-model="emailPass" required></b-form-input>
+                                        </b-form-group>
+
+                                        <b-form-group
+                                                horizontal
+                                                :label-cols="4"
+                                                breakpoint="md"
+                                                description="Only AT&T phone numbers are supported"
+                                                label="Phone Number">
+                                            <b-form-input type="phone" v-model="phoneNumber" required></b-form-input>
                                         </b-form-group>
 
                                         <b-button type="submit" variant="primary">Submit</b-button>

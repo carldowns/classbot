@@ -259,7 +259,7 @@ public class UARKWebDriver implements iWebDriver {
             throw new RuntimeException("email pass is not set");
         }
 
-        String to = pref.getEmailUser();
+        String to = pref.getPhoneNumber();
         String from = pref.getEmailUser();
         String pass = pref.getEmailPass();
 

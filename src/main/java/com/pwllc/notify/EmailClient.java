@@ -1,6 +1,7 @@
 package com.pwllc.notify;
 
 import com.pwllc.app.AppPreferences;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import javax.mail.*;
@@ -8,17 +9,42 @@ import javax.mail.internet.*;
 
 public class EmailClient
 {
+    // Sweet: AT&T has a way to send emails as SMS texts --
+    // @see https://www.att.com/esupport/article.html#!/wireless/KM1061254
+    // Target phone number must be an AT&T number of course.
+    // Simply postfix this service string to the 10 digit phone number - no dashes or leading 1.
+
+    private static String ATT_SMS_SERVICE_POSTFIX = "@txt.att.net";
+
     public static void main(String [] args) {
         try {
             AppPreferences pref = new AppPreferences();
-            send(pref.getEmailUser(), pref.getEmailPass(), pref.getEmailUser(), "ClassBot", "test message");
+            send(pref.getEmailUser(),
+                    pref.getEmailPass(),
+                    pref.getPhoneNumber() + ATT_SMS_SERVICE_POSTFIX,
+                    "ClassBot",
+                    "test message");
         }
             catch (Exception e) {
                 e.printStackTrace();
             }
     }
 
+    /**
+     * supports sending
+     * @param from
+     * @param pass
+     * @param to can be an email address or an ATT phone number
+     * @param subject
+     * @param body
+     */
     public static void send(String from, String pass, String to, String subject, String body) {
+
+        // if numeric, then its a phone number, so append the postfix
+        if (StringUtils.isNumeric (to)) {
+            to = to + ATT_SMS_SERVICE_POSTFIX;
+        }
+
         useYahooMail(from, pass, to, subject, body);
     }
 

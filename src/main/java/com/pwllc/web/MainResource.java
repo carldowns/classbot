@@ -38,10 +38,11 @@ public class MainResource {
     }
 
     @POST
-    @Path("/email")
-    public void putEmailCredentials (@QueryParam("emailUser") String user,
-                                     @QueryParam("emailPass") String pass) {
-        pref.setEmailCredentials(user, pass);
+    @Path("/notification")
+    public void putNotificationCredentials (@QueryParam("emailUser") String user,
+                                            @QueryParam("emailPass") String pass,
+                                            @QueryParam("phoneNumber") String phoneNumber) {
+        pref.setNotificationCredentials(user, pass, phoneNumber);
     }
 
     @POST

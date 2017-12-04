@@ -1,6 +1,8 @@
 package com.pwllc.app;
 
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.prefs.Preferences;
 
 public class AppPreferences {
@@ -13,9 +15,21 @@ public class AppPreferences {
         preferences.put("sitePass", sitePass);
     }
 
-    public void setEmailCredentials(String emailUser, String emailPass) {
-        preferences.put("emailUser", emailUser);
-        preferences.put("emailPass", emailPass);
+    public void setNotificationCredentials(String emailUser, String emailPass, String phoneNumber) {
+
+        if (!StringUtils.isEmpty(emailUser)) {
+            preferences.put("emailUser", emailUser);
+        }
+
+        if (!StringUtils.isEmpty(emailPass)) {
+            preferences.put("emailPass", emailPass);
+        }
+
+        if (!StringUtils.isEmpty(phoneNumber)) {
+            phoneNumber = StringUtils.replaceChars(phoneNumber, "-", "");
+            phoneNumber = StringUtils.replaceChars(phoneNumber, " ", "");
+            preferences.put("phoneNumber", phoneNumber);
+        }
     }
 
     public String getSiteUser() {
@@ -33,4 +47,9 @@ public class AppPreferences {
     public String getEmailPass() {
         return preferences.get("emailPass", null);
     }
+
+    public String getPhoneNumber() {
+        return preferences.get("phoneNumber", null);
+    }
+
 }

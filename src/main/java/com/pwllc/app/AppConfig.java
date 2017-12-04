@@ -79,4 +79,12 @@ public class AppConfig extends Configuration {
         return automationDriverType;
     }
 
+
+	@NotEmpty
+	private String automationMaxNotificationsPerHour;
+
+	@JsonProperty
+	public String getAutomationMaxNotificationsPerHour() {
+		return automationMaxNotificationsPerHour;
+	}
 }

@@ -22,7 +22,8 @@ const vm = new Vue({
         siteUser: null,
         sitePass: null,
         emailUser: null,
-        emailPass: null
+        emailPass: null,
+        phoneNumber: null
     },
     //mounted() {
     //    axios.get("api/main")
@@ -68,16 +69,17 @@ const vm = new Vue({
             );
         },
 
-        setEmailCredentials() {
+        setNotificationCredentials() {
             axios({
                 method: 'post',
-                url: '/api/main/email',
+                url: '/api/main/notification',
                 headers: {
                     'Content-type': 'application/x-www-form-urlencoded'
                 },
                 params: {
                     emailUser: this.emailUser,
-                    emailPass: this.emailPass
+                    emailPass: this.emailPass,
+                    phoneNumber: this.phoneNumber
                 }
             })
                 .then((response) => {
