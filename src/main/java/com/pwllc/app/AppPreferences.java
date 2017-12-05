@@ -26,8 +26,6 @@ public class AppPreferences {
         }
 
         if (!StringUtils.isEmpty(phoneNumber)) {
-            phoneNumber = StringUtils.replaceChars(phoneNumber, "-", "");
-            phoneNumber = StringUtils.replaceChars(phoneNumber, " ", "");
             preferences.put("phoneNumber", phoneNumber);
         }
     }

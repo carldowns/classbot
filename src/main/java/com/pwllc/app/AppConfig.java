@@ -30,20 +30,14 @@ public class AppConfig extends Configuration {
 	}
 
     /**
-     * allows us to develop on the front-end without having the background automations going on
+     * determines if the program will run background scans.
+	 * The "Run Now!" will work regardless of this setting
      */
 	@JsonProperty
-	private String automationEnabled;
+	private String automationPeriodicScansEnabled;
 
-	public String getAutomationEnabled() {
-		return automationEnabled;
-	}
-    public String getEnableAutomation() {
-        return automationEnabled;
-    }
-
-    public Boolean isEnableAutomation() {
-        return Boolean.valueOf(automationEnabled);
+    public Boolean isAutomationPeriodicScansEnabled() {
+        return Boolean.valueOf(automationPeriodicScansEnabled);
     }
 
 	@JsonProperty
@@ -67,24 +61,23 @@ public class AppConfig extends Configuration {
 		return automationThreadCount;
 	}
 
-
     /**
      * Driver type selects the driver class meaning either UT or UARK currently supported.
      */
-    @NotEmpty
-    private String automationDriverType;
+	@JsonProperty
+	private String automationDriverType;
 
-    @JsonProperty
     public String getAutomationDriverType() {
         return automationDriverType;
     }
 
-
-	@NotEmpty
-	private String automationMaxNotificationsPerHour;
-
+	/**
+	 * throttles the number of notifications to 1 every N minutes
+	 */
 	@JsonProperty
-	public String getAutomationMaxNotificationsPerHour() {
-		return automationMaxNotificationsPerHour;
+	private Integer automationNotificationWindowInMinutes;
+
+	public Integer getAutomationNotificationWindowInMinutes() {
+		return automationNotificationWindowInMinutes;
 	}
 }

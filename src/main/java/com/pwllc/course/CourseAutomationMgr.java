@@ -1,11 +1,16 @@
 package com.pwllc.course;
 
+import com.google.common.collect.Maps;
 import com.pwllc.app.AppConfig;
 import com.pwllc.app.AppPreferences;
+import com.pwllc.notify.EmailClient;
 import com.pwllc.selenium.UARKWebDriver;
 import com.pwllc.selenium.UTWebDriver;
 import com.pwllc.selenium.iWebDriver;
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
 
+import java.util.Map;
 import java.util.concurrent.*;
 
 /**
@@ -15,6 +20,7 @@ import java.util.concurrent.*;
 public class CourseAutomationMgr {
 
     private ScheduledThreadPoolExecutor threadPool;
+    private Map<String, DateTime> notificationLog = Maps.newConcurrentMap();
     private AppPreferences pref;
     private CourseDAO dao;
     private AppConfig cfg;
@@ -28,7 +34,7 @@ public class CourseAutomationMgr {
         this.threadPool = new ScheduledThreadPoolExecutor(cfg.getAutomationThreadCount());
 
         // if background automation is enabled, queue JobRunner
-        if (cfg.isEnableAutomation()) {
+        if (cfg.isAutomationPeriodicScansEnabled()) {
             threadPool.scheduleAtFixedRate(jobRunner,
                     0, cfg.getAutomationIntervalInSeconds(),
                     TimeUnit.SECONDS);
@@ -96,12 +102,49 @@ public class CourseAutomationMgr {
 
         public void run () {
             try {
-                flow.doFlow();
-                dao.updateCourse(info);
+                if (isNotificationWindowOpen(info)) {
+                    flow.doFlow();
+                    dao.updateCourse(info);
+                    if (flow.isNotificationIndicated()) {
+                        EmailClient.send(pref, info);
+                    }
+                }
             }
             catch (Exception e) {
                 System.err.println(e.getMessage());
             }
         }
+    }
+
+    /**
+     * returns true if the last cached notification for this course happened outside of the configured window.
+     * @param info
+     * @return
+     */
+    private boolean isNotificationWindowOpen (CourseInfo info) {
+
+        String key = info.getCourseNumber() + "." + info.getStatus();
+        DateTime now = new DateTime();
+        DateTime lastTime = notificationLog.get(key);
+
+        if (lastTime == null) {
+            notificationLog.put(key, now);
+            return true;
+        }
+
+        Duration timeElapsedSinceLastNotification = new Duration(lastTime, now);
+        Duration window = Duration.standardMinutes(cfg.getAutomationNotificationWindowInMinutes());
+        boolean isWindowOpen = timeElapsedSinceLastNotification.isLongerThan(window);
+
+        if (isWindowOpen) {
+            notificationLog.put(key, now);
+            return true;
+        }
+
+        System.out.println (
+                        info + " notification window is closed.  " +
+                        "time elapsed since last notification is " + timeElapsedSinceLastNotification +
+                        " which is less than configured window " + window);
+        return false;
     }
 }

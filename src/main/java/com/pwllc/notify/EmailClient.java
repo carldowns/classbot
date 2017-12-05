@@ -1,6 +1,7 @@
 package com.pwllc.notify;
 
 import com.pwllc.app.AppPreferences;
+import com.pwllc.course.CourseInfo;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
@@ -28,6 +29,39 @@ public class EmailClient
             catch (Exception e) {
                 e.printStackTrace();
             }
+    }
+
+    public static void send(AppPreferences pref, CourseInfo info) {
+
+        // TODO replace with something to get the word to the user
+        StringBuffer builder = new StringBuffer();
+        builder.append(info.getCourseNumber()).append("  ");
+        builder.append(info.getStatus()).append("  ");
+        builder.append(info.getSemesterTitle()).append("  ");
+        builder.append(info.getLastChecked()).append("  ");
+        builder.append(info.getDetail());
+
+        String notice = builder.toString();
+        System.out.println(notice);
+
+        if (pref.getEmailUser() == null) {
+            throw new RuntimeException("email user is not set");
+        }
+
+        if (pref.getEmailPass() == null) {
+            throw new RuntimeException("email pass is not set");
+        }
+
+        if (pref.getPhoneNumber() == null) {
+            throw new RuntimeException("phone number is not set");
+        }
+
+        String to = pref.getPhoneNumber();
+        String from = pref.getEmailUser();
+        String pass = pref.getEmailPass();
+
+        String subject = "ClassBot: " + info.getCourseNumber() + " is " + info.getStatus();
+        send(from, pass, to, subject, notice);
     }
 
     /**
@@ -76,6 +110,10 @@ public class EmailClient
             // Set To: header field of the header.
             message.addRecipient(Message.RecipientType.TO,
                     new InternetAddress(to));
+
+//            // include the host address
+//            message.addRecipient(Message.RecipientType.TO,
+//                    new InternetAddress(from));
 
             // Set Subject: header field
             message.setSubject(subject);

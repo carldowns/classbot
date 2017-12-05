@@ -20,6 +20,7 @@ public class UTWebDriver implements iWebDriver {
     WebDriver driver;
     AppPreferences pref;
     CourseInfo course;
+    boolean isNotify = false;
 
     // testing entry point
     public static void main (String args[]) {
@@ -37,6 +38,10 @@ public class UTWebDriver implements iWebDriver {
 
         System.setProperty("webdriver.chrome.driver", "chromedriver/chromedriver");
         driver = new ChromeDriver();
+    }
+
+    public boolean isNotificationIndicated() {
+        return isNotify;
     }
 
     public void doFlow () {
@@ -168,7 +173,7 @@ public class UTWebDriver implements iWebDriver {
         if (text.contains("open")) {
             course.setStatus("open");
             if (course.getNotifyOpen()) {
-                sendNotification();
+                isNotify = true;
             }
             return;
         }
@@ -176,7 +181,7 @@ public class UTWebDriver implements iWebDriver {
         if (text.contains("closed")) {
             course.setStatus("closed");
             if (course.getNotifyClosed()) {
-                sendNotification();
+                isNotify = true;
             }
             return;
         }
@@ -184,7 +189,7 @@ public class UTWebDriver implements iWebDriver {
         if (text.contains("waitlisted")) {
             course.setStatus("waitlisted");
             if (course.getNotifyWaitListed()) {
-                sendNotification();
+                isNotify = true;
             }
             return;
         }
@@ -192,32 +197,4 @@ public class UTWebDriver implements iWebDriver {
         throw new RuntimeException("unable to determine course status");
     }
 
-    private void sendNotification() {
-
-        // TODO replace with something to get the word to the user
-        StringBuffer builder = new StringBuffer();
-        builder.append(course.getCourseNumber()).append("  ");
-        builder.append(course.getStatus()).append("  ");
-        builder.append(course.getSemesterTitle()).append("  ");
-        builder.append(course.getLastChecked()).append("  ");
-        builder.append(course.getDetail());
-
-        String notice = builder.toString();
-        System.out.println(notice);
-
-        if (pref.getEmailUser() == null) {
-            throw new RuntimeException("email user is not set");
-        }
-
-        if (pref.getEmailPass() == null) {
-            throw new RuntimeException("email pass is not set");
-        }
-
-        String to = pref.getPhoneNumber();
-        String from = pref.getEmailUser();
-        String pass = pref.getEmailPass();
-
-        String subject = "ClassBot: " + course.getCourseNumber() + " is " + course.getStatus();
-        EmailClient.send(from, pass, to, subject, notice);
-    }
 }

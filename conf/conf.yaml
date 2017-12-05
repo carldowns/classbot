@@ -4,12 +4,12 @@ server:
   # Jersey to serve all resources under this root for the pathInfo
   rootPath: /api/*
 
-automationEnabled: false
 #automationDriverType: UT
 automationDriverType: UARK
+automationPeriodicScansEnabled: false
 automationIntervalInSeconds: 60
 automationStaggeredDelayInSeconds: 15
-automationMaxNotificationsPerHour: 3
+automationNotificationWindowInMinutes: 15
 automationThreadCount: 5
 
 enableCacheControl: false

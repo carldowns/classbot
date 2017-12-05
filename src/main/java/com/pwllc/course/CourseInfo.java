@@ -128,4 +128,9 @@ public class CourseInfo {
     public void setNotifyWaitListed(Boolean notifyWaitListed) {
         this.notifyWaitListed = notifyWaitListed;
     }
+
+    @Override
+    public String toString() {
+        return "Course " + courseNumber;
+    }
 }

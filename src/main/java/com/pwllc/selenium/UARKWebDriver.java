@@ -25,6 +25,7 @@ public class UARKWebDriver implements iWebDriver {
     WebDriver driver;
     AppPreferences pref;
     CourseInfo course;
+    boolean isNotify = false;
 
     // testing entry point
     public static void main (String args[]) {
@@ -45,6 +46,10 @@ public class UARKWebDriver implements iWebDriver {
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments(agentString);
         driver = new ChromeDriver(chromeOptions);
+    }
+
+    public boolean isNotificationIndicated() {
+        return isNotify;
     }
 
     public void doFlow () {
@@ -214,7 +219,7 @@ public class UARKWebDriver implements iWebDriver {
         if (openImages.size() > 1) {
             course.setStatus("open");
             if (course.getNotifyOpen()) {
-                sendNotification();
+                isNotify = true;
             }
             return;
         }
@@ -222,7 +227,7 @@ public class UARKWebDriver implements iWebDriver {
         if (closedImages.size() > 1) {
             course.setStatus("closed");
             if (course.getNotifyClosed()) {
-                sendNotification();
+                isNotify = true;
             }
             return;
         }
@@ -230,7 +235,7 @@ public class UARKWebDriver implements iWebDriver {
         if (WaitListImages.size() > 1) {
             course.setStatus("waitlisted");
             if (course.getNotifyWaitListed()) {
-                sendNotification();
+                isNotify = true;
             }
             return;
         }
@@ -238,34 +243,6 @@ public class UARKWebDriver implements iWebDriver {
         throw new RuntimeException("unable to determine course status");
     }
 
-    private void sendNotification() {
-
-        // TODO replace with something to get the word to the user
-        StringBuffer builder = new StringBuffer();
-        builder.append(course.getCourseNumber()).append("  ");
-        builder.append(course.getStatus()).append("  ");
-        builder.append(course.getSemesterTitle()).append("  ");
-        builder.append(course.getLastChecked()).append("  ");
-        builder.append(course.getDetail());
-
-        String notice = builder.toString();
-        System.out.println(notice);
-
-        if (pref.getEmailUser() == null) {
-            throw new RuntimeException("email user is not set");
-        }
-
-        if (pref.getEmailPass() == null) {
-            throw new RuntimeException("email pass is not set");
-        }
-
-        String to = pref.getPhoneNumber();
-        String from = pref.getEmailUser();
-        String pass = pref.getEmailPass();
-
-        String subject = "ClassBot: " + course.getCourseNumber() + " is " + course.getStatus();
-        EmailClient.send(from, pass, to, subject, notice);
-    }
 
     private void sleep () {
         try {
