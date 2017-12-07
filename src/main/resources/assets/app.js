@@ -23,7 +23,8 @@ const vm = new Vue({
         sitePass: null,
         emailUser: null,
         emailPass: null,
-        phoneNumber: null
+        phoneNumber: null,
+        driverType: null
     },
     //mounted() {
     //    axios.get("api/main")
@@ -38,7 +39,7 @@ const vm = new Vue({
 
     created: function() {
         this.fetchList();
-        //this.timer = window.setInterval(vm.fetchList(), 2000); // 1 seconds, refresh
+        this.fetchDriverType();
     },
 
     watch: {
@@ -117,9 +118,19 @@ const vm = new Vue({
         },
 
         fetchList() {
-            axios.get("api/main")
+            axios.get("api/main/courses")
                 .then(response => {
                     this.results = response.data;
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        },
+
+        fetchDriverType() {
+            axios.get("api/main/driverType")
+                .then(response => {
+                    this.driverType = response.data;
                 })
                 .catch((error) => {
                     console.log(error);

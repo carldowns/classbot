@@ -57,7 +57,7 @@ public class App extends Application<AppConfig> {
         CourseAutomationMgr mgr = new CourseAutomationMgr(dao, pref, configuration);
 
         // create and register REST resource endpoints
-    	MainResource resource = new MainResource(dao, pref, mgr);
+    	MainResource resource = new MainResource(dao, configuration, pref, mgr);
     	environment.jersey().register(resource);
 
     }

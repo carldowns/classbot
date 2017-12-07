@@ -25,9 +25,17 @@
                         <!--fixed="top"-->
                         <b-navbar type="dark" variant="secondary" toggleable>
                             <b-navbar-brand href="#">
-                                <img src="img/texas_longhorns.png" width="30" height="30" class="d-inline-block align-top" alt="BV">
-                                UT ClassBot
+                                <span v-if="driverType === 'UT'">
+                                    <img src="img/texas_longhorns.png" width="30" height="30" class="d-inline-block align-top" alt="UT">
+                                    Texas ClassBot
+                                </span>
+
+                                <span v-if="driverType === 'UARK'">
+                                    <img src="img/uark2.jpg" width="30" height="30" class="d-inline-block align-top" alt="UARK">
+                                    Arkansas ClassBot
+                                </span>
                             </b-navbar-brand>
+
                             <b-navbar-toggle target="nav_dropdown_collapse"></b-navbar-toggle>
                             <b-collapse is-nav id="nav_dropdown_collapse">
                                 <!--<b-navbar-nav>-->

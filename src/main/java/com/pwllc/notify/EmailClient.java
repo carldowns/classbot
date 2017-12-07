@@ -35,10 +35,8 @@ public class EmailClient
 
         // TODO replace with something to get the word to the user
         StringBuffer builder = new StringBuffer();
-        builder.append(info.getCourseNumber()).append("  ");
-        builder.append(info.getStatus()).append("  ");
-        builder.append(info.getSemesterTitle()).append("  ");
-        builder.append(info.getLastChecked()).append("  ");
+        builder.append(info.getSemesterTitle()).append(" \n");
+        builder.append(info.getLastChecked()).append(" \n");
         builder.append(info.getDetail());
 
         String notice = builder.toString();

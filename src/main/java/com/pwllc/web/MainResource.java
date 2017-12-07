@@ -1,6 +1,7 @@
 package com.pwllc.web;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.pwllc.app.AppConfig;
 import com.pwllc.app.AppPreferences;
 import com.pwllc.course.CourseAutomationMgr;
 import com.pwllc.course.CourseInfo;
@@ -17,15 +18,17 @@ public class MainResource {
 	private CourseDAO dao;
     private AppPreferences pref;
     private CourseAutomationMgr autoMgr;
+    private AppConfig cfg;
 
-    public MainResource(CourseDAO dao, AppPreferences pref, CourseAutomationMgr autoMgr) {
+    public MainResource(CourseDAO dao, AppConfig cfg, AppPreferences pref, CourseAutomationMgr autoMgr) {
         this.dao = dao;
+        this.cfg = cfg;
         this.pref = pref;
         this.autoMgr = autoMgr;
     }
 
     @GET
-    @Path("/")
+    @Path("/courses")
     public List<CourseInfo> getList() {
         return dao.getCourses();
     }
@@ -97,42 +100,9 @@ public class MainResource {
         autoMgr.runNow(courseNumber);
     }
 
-
-    // testing
     @GET
-    @Path ("/test/init")
-    public List initTestData() {
-        CourseInfo open = new CourseInfo("Spring 2018", "47465");
-        dao.addCourse(open);
-
-        //CourseInfo closed = new CourseInfo("Spring 2018", "47470");
-        //dao.addCourse(closed);
-        
-        return dao.getCourses();
-    }
-
-
-    @GET
-    @Path("/news")
-    public News[] getNews() {
-        return new News[]{
-                new News("Trump takes a shit at GOP conference","Someone clean it up"),
-                new News("Putin wins US Presidency","We like Vodka"),
-                new News("Clinton leaves for China","see you later"),
-                new News("Mueller stikes a pose","Gonna bust you up man"),
-                new News("GOP implodes","the weight was just too much"),
-        };
-    }
-
-    static class News {
-        @JsonProperty("title")
-        String title;
-        @JsonProperty("abstract")
-        String detail;
-
-        public News(String title, String detail) {
-            this.title = title;
-            this.detail = detail;
-        }
+    @Path("/driverType")
+    public String getDriverType() {
+        return cfg.getAutomationDriverType();
     }
 }
