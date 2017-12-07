@@ -2,6 +2,7 @@ package com.pwllc.app;
 
 import com.pwllc.course.CourseAutomationMgr;
 import com.pwllc.course.CourseDAO;
+import com.pwllc.h2.H2HealthCheck;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.servlets.CacheBustingFilter;
@@ -14,13 +15,6 @@ import java.util.EnumSet;
 
 /**
  * The main Dropwizard Application class.
- * TODO: Move credentials to config
- * TODO: Use HL for simple storage of class jobs
- * TODO: UI for list of target classes
- * TODO: UI to add a new class monitor
- * TODO: UI to remove a class monitor
- * TODO: UI to toggle class monitor
- *
  */
 public class App extends Application<AppConfig> {
 	
@@ -44,22 +38,24 @@ public class App extends Application<AppConfig> {
     }
 
     @Override
-    public void run(AppConfig configuration, Environment environment) {
+    public void run(AppConfig cfg, Environment env) {
 
         // enable or disable static asset caching (helps during development)?
-        setCachePolicy(configuration, environment);
+        setCachePolicy(cfg, env);
 
-        // configuration has a 'server:rootPath' declaration which prepends a rootPath for all Resources
-        CourseDAO dao = new CourseDAO(configuration);
+        // config has a 'server:rootPath' declaration which prepends a rootPath for all Resources
+        CourseDAO dao = new CourseDAO(cfg);
         AppPreferences pref = new AppPreferences();
 
         // start background automation
-        CourseAutomationMgr mgr = new CourseAutomationMgr(dao, pref, configuration);
+        CourseAutomationMgr mgr = new CourseAutomationMgr(dao, pref, cfg);
 
         // create and register REST resource endpoints
-    	MainResource resource = new MainResource(dao, configuration, pref, mgr);
-    	environment.jersey().register(resource);
+    	MainResource resource = new MainResource(dao, cfg, pref, mgr);
+        env.jersey().register(resource);
 
+        // register health checks
+        env.healthChecks().register("database", new H2HealthCheck());
     }
 
     private void setCachePolicy(AppConfig configuration, Environment environment) {

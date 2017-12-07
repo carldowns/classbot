@@ -90,14 +90,16 @@ public class MainResource {
 
     @DELETE
     @Path("/course/{courseNumber}")
-    public void delete(@PathParam("courseNumber") String courseNumber) {
+    public String delete(@PathParam("courseNumber") String courseNumber) {
         dao.deleteCourse(courseNumber);
+        return "ok";
     }
 
     @GET
     @Path("/run/{courseNumber}")
-    public void runAutomationNow(@PathParam("courseNumber") String courseNumber) {
+    public String runAutomationNow(@PathParam("courseNumber") String courseNumber) {
         autoMgr.runNow(courseNumber);
+        return "ok";
     }
 
     @GET
